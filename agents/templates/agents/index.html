@@ -1,9 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Home</title>
-</head>
-<body>
-	<a href="#">Add agent</a>
-</body>
-</html>
+{% block content %}
+
+	{% load bootstrap4 %}     
+	{% bootstrap_css %}         
+	{% bootstrap_javascript jquery='full' %}  
+	{% load crispy_forms_tags %}
+	{{ form.media }} 
+
+	<div class="container">
+	
+		<a href="{% url 'add_agent' %}">Add Agent</a>| 
+		<a href="{% url 'add_role' %}">Add Role</a>|
+		<a href="{% url 'agents' %}">Change Agent status</a>|
+		<!-- <a href="">Add Issue</a> -->
+	</div>
+	
+{% endblock content %}
+
+

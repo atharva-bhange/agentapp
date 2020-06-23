@@ -25,7 +25,7 @@ SECRET_KEY = 'cyg9yl_t5k%r3_#xq!b2z$cnk5apd2c2$858_*ny%mrwtljj$_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'agents.apps.AgentsConfig',
+    'bootstrap_datepicker_plus',
+    'bootstrap4',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +122,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "assets")
+
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}

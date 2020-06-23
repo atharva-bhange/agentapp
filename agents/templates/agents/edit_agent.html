@@ -1,0 +1,21 @@
+{% block content %}
+
+	{% load bootstrap4 %}     
+	{% bootstrap_css %}         
+	{% bootstrap_javascript jquery='full' %}  
+	{% load crispy_forms_tags %}
+	{{ form.media }} 
+	
+	<div class="container">
+		<form method="post">
+			{% csrf_token %}
+			<h2 style="border-bottom: solid 2px black">Edit Agent</h2>
+			{{ form |crispy  }}
+			<div class="float-right">
+				<a href="{% url 'index' %}"><input type="button" value="Back to home" class="btn btn-primary mr-1"></a>
+				<input type="submit" name="submit" class="btn btn-outline-success float-right" value="Save Agent">
+			</div>
+		</form>
+	</div>
+
+{% endblock content %}
