@@ -7,11 +7,147 @@
 	{{ form.media }} 
 
 	<div class="container">
-	
-		<a href="{% url 'add_agent' %}">Add Agent</a>| 
-		<a href="{% url 'add_role' %}">Add Role</a>|
-		<a href="{% url 'agents' %}">Change Agent status</a>|
-		<!-- <a href="">Add Issue</a> -->
+
+		<h2>Agent Selector</h2>
+
+		<div class="row text-center">
+
+
+			<div class="col-lg-1">
+				<a href="{% url 'add_agent' %}"><button class="btn btn-outline-success m-2">Add Agent</button></a>
+			</div>
+
+			<div class="col-lg-1">
+				<a href="{% url 'add_role' %}"><button class="btn btn-outline-primary m-2">Add Role</button></a>
+			</div>
+
+			<div class="col-lg-2">
+				<a href="{% url 'agents' %}"><button class="btn btn-outline-warning	 m-2">Change Agent status</button></a>
+			</div>
+
+			<div class="col-lg-1">
+				<a href="{% url 'add_issue' %}"><button class="btn btn-outline-info m-2">Add Issue</button></a>
+			</div>
+
+			<div class="col-lg-7"> 
+				<form method="get" >
+
+					<div class="row ">
+						<div class="col-lg-10 ">
+							<div class="form-group">
+								<label for="selection_method"><i>Selection Method</i></label>
+								<select class="form-control" id="selection_method" name="m">
+									{% if method == '2' %}
+									<option value="1">All Available</option>
+									<option value="2" selected>Least Busy</option>
+									<option value="3">Random</option>
+									{% elif method == '1' %}
+									<option value="1" selected>All Available</option>
+									<option value="2">Least Busy</option>
+									<option value="3">Random</option>
+									{% elif method == '3' %}
+									<option value="1">All Available</option>
+									<option value="2">Least Busy</option>
+									<option value="3" selected>Random</option>
+									{% else %}	
+									<option value="1">All Available</option>
+									<option value="2" selected>Least Busy</option>
+									<option value="3">Random</option>					
+									{% endif %}
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-2 "> 
+							<input class="btn btn-success mt-4" type="submit" name="" value="Submit">
+						</div>
+					</div>
+
+				</form>
+			</div>
+
+		</div>
+		<hr>
+
+		<div class="row">
+			<div class="col-lg-8">
+				<h4>Agents and roles</h4>
+			<div id="agents_list" style="max-height: 300px; overflow-y: scroll;">
+				
+				<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Name</th>
+			    		<th scope="col">Availibility</th>
+			      		<th scope="col">Available since</th>
+			      		<th scope="col">Roles</th>
+			    	</tr>
+			  	</thead>
+			  	<tbody>
+				{% for agent in agent_info %}
+				<tr>
+
+					<th scope="row">{{ agent.id }}</th>
+					{% if agent.name|length %}
+						{% if agent.is_available %}
+						<th scope="row" style="background-color: lightgreen">{{ agent.name }}</th>
+						{% else %}
+						<th scope="row" style="background-color: #FFFF66">{{ agent.name }}</th>
+						{% endif %}		
+					{% else %}
+						{% if agent.is_available %}
+						<th scope="row" style="background-color: lightgreen">No Name</th>
+						{% else %}
+						<th scope="row" style="background-color: #FFFF66">No Name</th>
+						{% endif %}		
+					{% endif %}
+
+					{% if agent.is_available %}
+						<td>Yes</td>
+					{% else %}
+						<td>No</td>
+					{% endif %}
+					
+					<td>{{ agent.available_since }}</td>
+					<td>
+					{% for role in agent.roles %}
+						{{ role.role }} ,
+					{% endfor %}
+					</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+				</table>
+			</div>
+			</div>
+			<div class="col-lg-4" >
+				<h4>Issues</h4>
+			<div id="issue_list" style="max-height: 300px; overflow-y: scroll;">
+				
+				<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Issue</th>
+			    		<th scope="col">Start Time</th>
+			    	</tr>
+			  	</thead>
+			  	<tbody>
+			  		{% for issue in issues_info %}
+			  		<tr>
+			  			<td> {{ issue.id }}</td>
+			  			<td> {{ issue.issue }}</td>
+			  			<td> {{ issue.start_time }}</td>
+			  		</tr>
+			  		{% endfor %}
+			  	</tbody>
+			  </table>
+				
+			</div>
+			</div>
+		</div>
+
+
 	</div>
 	
 {% endblock content %}

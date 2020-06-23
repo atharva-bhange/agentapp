@@ -1,13 +1,49 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .forms	 import AddAgentForm , AddRoleForm, AddAgentRole
-from .models import Agents, Agent_role, Roles
+from .forms	 import AddAgentForm , AddRoleForm, AddAgentRole , AddIssueForm
+from .models import Agents, Agent_role, Roles, Issues
 from django.views.generic import ListView
 
 
 # Create your views here.
 
 def index_view(request):
-	return render(request , 'agents/index.html')
+
+
+	m = request.GET.get('m')
+	method = m
+	
+	if method == None:
+		method = 2
+
+	## Getting all agent information
+	info = []
+
+	agents = Agents.objects.all().order_by('is_available', 'available_since').reverse()
+
+	for each_agent in agents:
+		roles = Agent_role.objects.all().filter(agent = each_agent)
+		info.append({
+			'id' : each_agent.id,
+			'name' : each_agent.name,
+			'is_available' : each_agent.is_available,
+			'available_since' : each_agent.available_since,
+			'roles' : roles
+			})
+
+	## Getting all issues information 
+
+	issues = Issues.objects.all().order_by('start_time')
+	
+
+	context ={
+		'method' : method,
+		'agent_info' : info,
+		'issues_info' : issues
+		}
+		
+	return render(request , 'agents/index.html', context)
+	
+	
 
 def add_agent_view(request):
 	if request.method == 'POST':
@@ -114,3 +150,29 @@ class Agent_list(ListView):
     context_object_name = 'agents'
     model = Agents
     template_name = 'agents/agents.html'
+
+def add_issue_view(request):
+	if request.method == 'POST':
+		issue_form = AddIssueForm(request.POST)
+		if issue_form.is_valid():
+
+			issue_form.save()
+			return redirect('index')
+
+		else:
+
+			issue_form = AddIssueForm(request.POST)
+			context = {
+				'form' : issue_form
+			}
+
+			return render(request , 'agents/add_issue.html' , context)
+
+	else:
+		issue_form = AddIssueForm()
+
+		context = {
+		'form' : issue_form
+		}
+
+	return render(request , 'agents/add_issue.html' , context)
