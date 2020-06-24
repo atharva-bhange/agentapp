@@ -227,29 +227,3 @@ def add_issue_view(request):
 		}
 
 	return render(request , 'agents/add_issue.html' , context)	
-
-
-	# if request.method == 'POST':
-	# 	issue_form = AddIssueForm(request.POST)
-	# 	if issue_form.is_valid():
-
-	# 		issue_form.save()
-	# 		return redirect('index')
-
-	# 	else:
-
-	# 		issue_form = AddIssueForm(request.POST)
-	# 		context = {
-	# 			'form' : issue_form
-	# 		}
-
-	# 		return render(request , 'agents/add_issue.html' , context)
-
-	# else:
-	# 	issue_form = AddIssueForm()
-
-	# 	context = {
-	# 	'form' : issue_form
-	# 	}
-
-	# return render(request , 'agents/add_issue.html' , context)
