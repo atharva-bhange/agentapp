@@ -20,11 +20,6 @@ class AddRoleForm(ModelForm):
 		model = Roles
 		fields = ['role']
 
-class AddAgentRole(ModelForm):
-
-	class Meta():
-		model = Agent_role
-		fields = ['role']
 
 class AddIssueForm(ModelForm):
 

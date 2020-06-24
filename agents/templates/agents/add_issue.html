@@ -10,13 +10,32 @@
 		<form method="post">
 			{% csrf_token %}
 			<h2 style="border-bottom: solid 2px black">Add Issue</h2>
-			{{ form |crispy  }}
+			{{ form |crispy}}
+			<div id="role_forms">
+			{{ role |crispy  }}
+			</div>
+
 			<div class="float-right">
+				<input type="button" id="add-role" class="btn btn-info" name="" value="Add Role">
 				<a href="{% url 'index' %}"><input type="button" value="Back to home" class="btn btn-primary mr-1"></a>
 				<input type="submit" name="submit" class="btn btn-outline-success float-right" value="Add Issue">
 			</div>
 		</form>
 	</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		var form_counter = 0;
+		$('#add-role').click(function(){
+			form_counter ++;
+			$("#role_forms").append('<div class="multiField"><div id="div_id_form-'+form_counter+'-role" class="form-group"><label for="id_form-'+form_counter+'-role" class=" requiredField">Role<span class="asteriskField">*</span> </label> <div class=""> <select name="form-'+form_counter+'-role" class="select form-control" id="id_form-'+form_counter+'-role"> '+$('#id_form-0-role').html()+'</select> </div> </div> <input type="hidden" name="form-'+form_counter+'-id" id="id_form-'+form_counter+'-id"></div></div>');
+			$('#id_form-TOTAL_FORMS').val(form_counter+1);
+		});
+	});
+	
+</script>
+
 
 {% endblock content %}
 

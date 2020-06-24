@@ -13,23 +13,23 @@
 		<div class="row text-center">
 
 
-			<div class="col-lg-1">
+			<div class="col-lg-1 col-md-3 col-sm-3 col-3">
 				<a href="{% url 'add_agent' %}"><button class="btn btn-outline-success m-2">Add Agent</button></a>
 			</div>
 
-			<div class="col-lg-1">
+			<div class="col-lg-1 col-md-3 col-sm-3 col-3">
 				<a href="{% url 'add_role' %}"><button class="btn btn-outline-primary m-2">Add Role</button></a>
 			</div>
 
-			<div class="col-lg-2">
-				<a href="{% url 'agents' %}"><button class="btn btn-outline-warning	 m-2">Change Agent status</button></a>
+			<div class="col-lg-2 col-md-3 col-sm-3 col-3">
+				<a href="{% url 'agents' %}"><button class="btn btn-outline-info m-2">Change Agent status</button></a>
 			</div>
 
-			<div class="col-lg-1">
-				<a href="{% url 'add_issue' %}"><button class="btn btn-outline-info m-2">Add Issue</button></a>
+			<div class="col-lg-1 col-md-3 col-sm-3 col-3">
+				<a href="{% url 'add_issue' %}"><button class="btn btn-outline-warning m-2">Add Issue</button></a>
 			</div>
 
-			<div class="col-lg-7"> 
+			<div class="col-lg-7 col-md-12 col-sm-12 col-12"> 
 				<form method="get" >
 
 					<div class="row ">
@@ -37,15 +37,15 @@
 							<div class="form-group">
 								<label for="selection_method"><i>Selection Method</i></label>
 								<select class="form-control" id="selection_method" name="m">
-									{% if method == '2' %}
+									{% if mode == '2' %}
 									<option value="1">All Available</option>
 									<option value="2" selected>Least Busy</option>
 									<option value="3">Random</option>
-									{% elif method == '1' %}
+									{% elif mode == '1' %}
 									<option value="1" selected>All Available</option>
 									<option value="2">Least Busy</option>
 									<option value="3">Random</option>
-									{% elif method == '3' %}
+									{% elif mode == '3' %}
 									<option value="1">All Available</option>
 									<option value="2">Least Busy</option>
 									<option value="3" selected>Random</option>
@@ -69,7 +69,7 @@
 		<hr>
 
 		<div class="row">
-			<div class="col-lg-8">
+			<div class="col-lg-7">
 				<h4>Agents and roles</h4>
 			<div id="agents_list" style="max-height: 300px; overflow-y: scroll;">
 				
@@ -120,7 +120,7 @@
 				</table>
 			</div>
 			</div>
-			<div class="col-lg-4" >
+			<div class="col-lg-5" >
 				<h4>Issues</h4>
 			<div id="issue_list" style="max-height: 300px; overflow-y: scroll;">
 				
@@ -130,6 +130,7 @@
 						<th scope="col">Id</th>
 						<th scope="col">Issue</th>
 			    		<th scope="col">Start Time</th>
+			    		<th scope="col">Roles</th>
 			    	</tr>
 			  	</thead>
 			  	<tbody>
@@ -138,6 +139,12 @@
 			  			<td> {{ issue.id }}</td>
 			  			<td> {{ issue.issue }}</td>
 			  			<td> {{ issue.start_time }}</td>
+			  			<td>
+			  			{% for role in issue.roles %}
+			  			{{ role.role }} ,
+			  			{% endfor %}
+
+			  			</td>
 			  		</tr>
 			  		{% endfor %}
 			  	</tbody>
@@ -147,6 +154,62 @@
 			</div>
 		</div>
 
+		<hr>
+		<h4>Selection Result</h4>
+
+		<div id="result_body">
+			{% if mode == '1' or mode == '2' or mode == '3' %}
+				<table class="table table-striped">
+				  <thead>
+				    <tr>
+				      <th scope="col">Issue Id</th>
+				      <th style="background-color: lightgreen" scope="col">Issue</th>
+				      <th style="background-color: lightgreen" scope="col">Agents</th>
+				      {% if mode == '2' %}
+				      <th>Issue Start Time</th>
+				      <th>Agent Available Since</th>
+				      {% else %}
+				      <th scope="col">Start Time</th>
+				      {% endif %}
+				    </tr>
+				  </thead>
+
+				  <tbody>
+				  	{% for issue_agent in issue_agent_list %}
+				    <tr>
+				      <th scope="row">{{ issue_agent.id.id }}</th>
+				      {% if issue_agent.id.issue|length %}
+				      <td style="background-color: lightgreen">{{ issue_agent.id.issue }}</td>
+				      {% else %}
+				      <td>No Name</td>
+				      {% endif %}
+				      <td style="background-color: lightgreen">
+				      	{% if issue_agent.agents|length %}
+				      	{% for agent in issue_agent.agents %}
+				      		{% if agent.name|length %}
+				      			{{ agent.name }}
+				      		{% else %}
+				      			Id_{{ agent.id }}
+				      		{% endif %}
+				      		, 
+				      	{% endfor %}
+				      	{% else %}
+				      		No Agent Available
+				      	{% endif %}
+				      </td>
+				      <td>{{ issue_agent.id.start_time }}</td>
+				      {% if mode == '2' %}
+				      	{% for agent in issue_agent.agents %}
+				      	<td>{{ agent.available_since }}</td>
+				      	{% endfor %}
+				      {% endif %}
+				    </tr>
+				    {% endfor %}
+				  </tbody>
+				</table>
+
+			{% endif %}
+		</div>
 
 	</div>
 	
